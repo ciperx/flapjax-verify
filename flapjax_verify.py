@@ -46,7 +46,9 @@ RPCS = [
     "https://bsc-dataseed1.defibit.io",
     "https://bsc-dataseed1.ninicoin.io",
     "https://bsc.rpc.blxrbdn.com",
-    "https://binance.llamarpc.com",
+    "https://bsc-dataseed.bnbchain.org",
+    "https://bsc-dataseed1.bnbchain.org",
+    "https://bsc.publicnode.com",
 ]
 
 Q96 = 2**96
@@ -57,7 +59,7 @@ class RpcError(RuntimeError):
     pass
 
 
-def rpc(method: str, params: list, _tries: int = 3):
+def rpc(method: str, params: list, _tries: int = 5):
     """Call an RPC method, rotating nodes on failure."""
     last = None
     for attempt in range(_tries):
@@ -165,6 +167,7 @@ def get_logs(address: str, topics: list, start: int, end: int) -> list:
             [{"address": address, "fromBlock": hex(cur), "toBlock": hex(to), "topics": topics}],
         )
         cur = to + 1
+        time.sleep(0.05)  # stay under public-node rate limits
     return hits
 
 
